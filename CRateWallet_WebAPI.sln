@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRateWallet_WebAPI.Api", "CRateWallet_WebAPI.Api\CRateWallet_WebAPI.Api.csproj", "{0C140BF2-CE5E-4C32-8BBC-34916F215887}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRateWallet_WebAPI.Domain", "CRateWallet_WebAPI.Domain\CRateWallet_WebAPI.Domain.csproj", "{A233AD37-F70F-4FA9-BECC-503743C594E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRateWallet_WebAPI.DataAccess", "CRateWallet_WebAPI.DataAccess\CRateWallet_WebAPI.DataAccess.csproj", "{0F1B6A38-BAAA-4838-8470-31B56FAEFBCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{0C140BF2-CE5E-4C32-8BBC-34916F215887}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C140BF2-CE5E-4C32-8BBC-34916F215887}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C140BF2-CE5E-4C32-8BBC-34916F215887}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A233AD37-F70F-4FA9-BECC-503743C594E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A233AD37-F70F-4FA9-BECC-503743C594E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A233AD37-F70F-4FA9-BECC-503743C594E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A233AD37-F70F-4FA9-BECC-503743C594E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F1B6A38-BAAA-4838-8470-31B56FAEFBCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F1B6A38-BAAA-4838-8470-31B56FAEFBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F1B6A38-BAAA-4838-8470-31B56FAEFBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F1B6A38-BAAA-4838-8470-31B56FAEFBCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
