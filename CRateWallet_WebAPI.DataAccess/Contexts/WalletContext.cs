@@ -27,6 +27,7 @@ namespace CRateWallet_WebAPI.DataAccess.Contexts
         public DbSet<UserToken> UserToken { get; set; }
         public DbSet<AdminToken> AdminToken { get; set; }
         public DbSet<MerchantToken> MerchantToken { get; set; }
+        public DbSet<OtpForRegis> OtpForRegis { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,6 +44,7 @@ namespace CRateWallet_WebAPI.DataAccess.Contexts
             modelBuilder.ApplyConfiguration(new UserTokenConfiguration());
             modelBuilder.ApplyConfiguration(new AdminTokenConfiguration());
             modelBuilder.ApplyConfiguration(new MerchantTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new OtpForRegisConfiguration());
         }
     }
 }

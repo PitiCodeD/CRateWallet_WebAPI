@@ -4,12 +4,11 @@ using System.Text;
 
 namespace CRateWallet_WebAPI.DataAccess.Models
 {
-    public class OtpManagement : UserBase
+    public class OtpForRegis : StatusBase
     {
         public int OtpId { get; set; }
         public string Otp { get; set; }
-        public int Type { get; set; }
+        public string Email { get; set; }
         public string Reference { get; set; }
-        public TypeOtpManagement TypeOtpManagement { get; set; }
     }
 }

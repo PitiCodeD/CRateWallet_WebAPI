@@ -20,6 +20,7 @@ namespace CRateWallet_WebAPI.DataAccess.Models
             UserToken = new HashSet<UserToken>();
             AdminToken = new HashSet<AdminToken>();
             MerchantToken = new HashSet<MerchantToken>();
+            OtpForRegis = new HashSet<OtpForRegis>();
         }
         public int ActvieStatus { get; set; }
         public string Description { get; set; }
@@ -35,5 +36,6 @@ namespace CRateWallet_WebAPI.DataAccess.Models
         public ICollection<UserToken> UserToken { get; set; }
         public ICollection<AdminToken> AdminToken { get; set; }
         public ICollection<MerchantToken> MerchantToken { get; set; }
+        public ICollection<OtpForRegis> OtpForRegis { get; set; }
     }
 }

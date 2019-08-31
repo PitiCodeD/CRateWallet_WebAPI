@@ -7,13 +7,13 @@ using System.Text;
 
 namespace CRateWallet_WebAPI.DataAccess.Configurations
 {
-    public class OtpManagementConfiguration : IEntityTypeConfiguration<OtpManagement>
+    public class OtpForRegisConfiguration : IEntityTypeConfiguration<OtpForRegis>
     {
-        public void Configure(EntityTypeBuilder<OtpManagement> builder)
+        public void Configure(EntityTypeBuilder<OtpForRegis> builder)
         {
             builder.HasKey(entity => entity.OtpId);
 
-            builder.ToTable("OTP_MANAGEMENT");
+            builder.ToTable("OTP_FOR_REGIS");
 
             builder.Property(entity => entity.OtpId).HasColumnName("OTP_ID");
 
@@ -22,22 +22,15 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
                 .IsRequired()
                 .HasMaxLength(10);
 
-            builder.Property(entity => entity.Type).HasColumnName("TYPE");
-
-            builder.HasOne(entity => entity.TypeOtpManagement)
-                .WithOne(entity => entity.OtpManagement)
-                .HasForeignKey<OtpManagement>(entity => entity.Type);
+            builder.Property(entity => entity.Email)
+                .HasColumnName("EMAIL")
+                .IsRequired()
+                .HasMaxLength(100);
 
             builder.Property(entity => entity.Reference)
                 .HasColumnName("REFERENCE")
                 .IsRequired()
                 .HasMaxLength(20);
-
-            builder.Property(entity => entity.UserId).HasColumnName("USER_ID");
-
-            builder.HasOne(entity => entity.User)
-                .WithOne(entity => entity.OtpManagement)
-                .HasForeignKey<OtpManagement>(entity => entity.UserId);
 
             builder.Property(entity => entity.CreateDatetime)
                 .HasDefaultValueSql("GETUTCDATE()")
@@ -54,7 +47,7 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
                 .HasColumnName("ACTIVE_STATUS");
 
             builder.HasOne(entity => entity.ActiveDescription)
-                .WithMany(entity => entity.OtpManagement)
+                .WithMany(entity => entity.OtpForRegis)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasForeignKey(entity => entity.ActiveStatus);
         }

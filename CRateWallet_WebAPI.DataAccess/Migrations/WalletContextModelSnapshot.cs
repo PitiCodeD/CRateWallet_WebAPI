@@ -385,6 +385,52 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                     b.ToTable("MERCHANT_USER_TRANSACTIONS");
                 });
 
+            modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.OtpForRegis", b =>
+                {
+                    b.Property<int>("OtpId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("OTP_ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ActiveStatus")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ACTIVE_STATUS")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime>("CreateDatetime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("CREATE_DATETIME")
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnName("EMAIL")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Otp")
+                        .IsRequired()
+                        .HasColumnName("OTP")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("REFERENCE")
+                        .HasMaxLength(20);
+
+                    b.Property<DateTime>("UpdateDatetime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("UpdateTime")
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.HasKey("OtpId");
+
+                    b.HasIndex("ActiveStatus");
+
+                    b.ToTable("OTP_FOR_REGIS");
+                });
+
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.OtpManagement", b =>
                 {
                     b.Property<int>("OtpId")
@@ -407,6 +453,11 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnName("OTP")
                         .HasMaxLength(10);
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("REFERENCE")
+                        .HasMaxLength(20);
 
                     b.Property<int>("Type")
                         .HasColumnName("TYPE");
@@ -537,6 +588,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .HasColumnName("BALANCE");
 
                     b.Property<DateTime?>("BirthDate")
+                        .IsRequired()
                         .HasColumnName("BIRTH_DATE")
                         .HasColumnType("datetime");
 
@@ -555,14 +607,17 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .HasColumnName("GENDER");
 
                     b.Property<string>("MobileNo")
+                        .IsRequired()
                         .HasColumnName("MOBILE_NO")
                         .HasMaxLength(20);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnName("NAME")
                         .HasMaxLength(50);
 
                     b.Property<string>("Surname")
+                        .IsRequired()
                         .HasColumnName("SURNAME")
                         .HasMaxLength(50);
 
@@ -707,6 +762,14 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .WithMany("MerchantUserTransactions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.OtpForRegis", b =>
+                {
+                    b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
+                        .WithMany("OtpForRegis")
+                        .HasForeignKey("ActiveStatus")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.OtpManagement", b =>
