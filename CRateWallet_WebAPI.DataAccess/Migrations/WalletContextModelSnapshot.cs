@@ -93,8 +93,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("AdminId");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.ToTable("ADMIN");
                 });
@@ -133,8 +132,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("TokenId");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.HasIndex("AdminId")
                         .IsUnique();
@@ -188,8 +186,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("AdminUserTransactionsId");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.HasIndex("AdminId");
 
@@ -228,8 +225,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("Gender");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.ToTable("GENDER_DESCRIPTION");
                 });
@@ -285,8 +281,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("MerchantId");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.ToTable("MERCHANT");
                 });
@@ -325,8 +320,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("TokenId");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.HasIndex("MerchantId")
                         .IsUnique();
@@ -382,8 +376,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("MerchantUserTransactionsId");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.HasIndex("MerchantId");
 
@@ -429,8 +422,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("OtpId");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.HasIndex("Type")
                         .IsUnique();
@@ -480,8 +472,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("PinId");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -520,8 +511,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("Type");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.ToTable("TYPE_OTP_MANAGEMENT");
                 });
@@ -584,11 +574,9 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
-                    b.HasIndex("Gender")
-                        .IsUnique();
+                    b.HasIndex("Gender");
 
                     b.ToTable("USER");
                 });
@@ -627,8 +615,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasKey("TokenId");
 
-                    b.HasIndex("ActiveStatus")
-                        .IsUnique();
+                    b.HasIndex("ActiveStatus");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -639,29 +626,29 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.Admin", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("Admin")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.Admin", "ActiveStatus")
+                        .WithMany("Admin")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.AdminToken", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("AdminToken")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.AdminToken", "ActiveStatus")
+                        .WithMany("AdminToken")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.Admin", "Admin")
                         .WithOne("AdminToken")
                         .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.AdminToken", "AdminId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.AdminUserTransactions", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("AdminUserTransactions")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.AdminUserTransactions", "ActiveStatus")
+                        .WithMany("AdminUserTransactions")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.Admin", "Admin")
@@ -678,24 +665,24 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.GenderDescription", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("GenderDescription")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.GenderDescription", "ActiveStatus")
+                        .WithMany("GenderDescription")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.Merchant", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("Merchant")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.Merchant", "ActiveStatus")
+                        .WithMany("Merchant")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.MerchantToken", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("MerchantToken")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.MerchantToken", "ActiveStatus")
+                        .WithMany("MerchantToken")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.Merchant", "Merchant")
@@ -707,8 +694,8 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.MerchantUserTransactions", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("MerchantUserTransactions")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.MerchantUserTransactions", "ActiveStatus")
+                        .WithMany("MerchantUserTransactions")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.Merchant", "Merchant")
@@ -725,8 +712,8 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.OtpManagement", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("OtpManagement")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.OtpManagement", "ActiveStatus")
+                        .WithMany("OtpManagement")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.TypeOtpManagement", "TypeOtpManagement")
@@ -743,8 +730,8 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.PinManagement", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("PinManagement")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.PinManagement", "ActiveStatus")
+                        .WithMany("PinManagement")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.User", "User")
@@ -756,29 +743,29 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.TypeOtpManagement", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("TypeOtpManagement")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.TypeOtpManagement", "ActiveStatus")
+                        .WithMany("TypeOtpManagement")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.User", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("User")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.User", "ActiveStatus")
+                        .WithMany("User")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.GenderDescription", "GenderDescription")
-                        .WithOne("User")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.User", "Gender")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("User")
+                        .HasForeignKey("Gender")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.UserToken", b =>
                 {
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
-                        .WithOne("UserToken")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.UserToken", "ActiveStatus")
+                        .WithMany("UserToken")
+                        .HasForeignKey("ActiveStatus")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.User", "User")

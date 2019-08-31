@@ -37,9 +37,9 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
                 .HasColumnName("ACTIVE_STATUS");
 
             builder.HasOne(entity => entity.ActiveDescription)
-                .WithOne(entity => entity.MerchantToken)
+                .WithMany(entity => entity.MerchantToken)
                 .OnDelete(DeleteBehavior.Restrict)
-                .HasForeignKey<MerchantToken>(entity => entity.ActiveStatus);
+                .HasForeignKey(entity => entity.ActiveStatus);
 
             builder.Property(entity => entity.MerchantId).HasColumnName("MERCHANT_ID");
 
