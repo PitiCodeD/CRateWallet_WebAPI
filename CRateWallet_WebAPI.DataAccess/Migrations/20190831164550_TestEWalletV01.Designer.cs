@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRateWallet_WebAPI.DataAccess.Migrations
 {
     [DbContext(typeof(WalletContext))]
-    [Migration("20190831013726_TestEWalletV02")]
-    partial class TestEWalletV02
+    [Migration("20190831164550_TestEWalletV01")]
+    partial class TestEWalletV01
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -387,6 +387,52 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                     b.ToTable("MERCHANT_USER_TRANSACTIONS");
                 });
 
+            modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.OtpForRegis", b =>
+                {
+                    b.Property<int>("OtpId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("OTP_ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ActiveStatus")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ACTIVE_STATUS")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime>("CreateDatetime")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnName("CREATE_DATETIME")
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnName("EMAIL")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Otp")
+                        .IsRequired()
+                        .HasColumnName("OTP")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("REFERENCE")
+                        .HasMaxLength(20);
+
+                    b.Property<DateTime>("UpdateDatetime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("UpdateTime")
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.HasKey("OtpId");
+
+                    b.HasIndex("ActiveStatus");
+
+                    b.ToTable("OTP_FOR_REGIS");
+                });
+
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.OtpManagement", b =>
                 {
                     b.Property<int>("OtpId")
@@ -409,6 +455,11 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnName("OTP")
                         .HasMaxLength(10);
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("REFERENCE")
+                        .HasMaxLength(20);
 
                     b.Property<int>("Type")
                         .HasColumnName("TYPE");
@@ -713,6 +764,14 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .WithMany("MerchantUserTransactions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.OtpForRegis", b =>
+                {
+                    b.HasOne("CRateWallet_WebAPI.DataAccess.Models.ActiveDescription", "ActiveDescription")
+                        .WithMany("OtpForRegis")
+                        .HasForeignKey("ActiveStatus")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.OtpManagement", b =>

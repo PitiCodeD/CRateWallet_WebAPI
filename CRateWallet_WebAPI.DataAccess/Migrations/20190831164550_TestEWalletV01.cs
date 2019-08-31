@@ -97,6 +97,30 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OTP_FOR_REGIS",
+                columns: table => new
+                {
+                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
+                    OTP_ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    OTP = table.Column<string>(maxLength: 10, nullable: false),
+                    EMAIL = table.Column<string>(maxLength: 100, nullable: false),
+                    REFERENCE = table.Column<string>(maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OTP_FOR_REGIS", x => x.OTP_ID);
+                    table.ForeignKey(
+                        name: "FK_OTP_FOR_REGIS_ACTIVE_DESCRIPTION_ACTIVE_STATUS",
+                        column: x => x.ACTIVE_STATUS,
+                        principalTable: "ACTIVE_DESCRIPTION",
+                        principalColumn: "ACTVIE_STATUS",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TYPE_OTP_MANAGEMENT",
                 columns: table => new
                 {
@@ -158,10 +182,10 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     EMAIL = table.Column<string>(maxLength: 100, nullable: false),
                     ACCOUNT_NO = table.Column<string>(maxLength: 20, nullable: false),
-                    NAME = table.Column<string>(maxLength: 50, nullable: true),
-                    SURNAME = table.Column<string>(maxLength: 50, nullable: true),
-                    BIRTH_DATE = table.Column<DateTime>(type: "datetime", nullable: true),
-                    MOBILE_NO = table.Column<string>(maxLength: 20, nullable: true),
+                    NAME = table.Column<string>(maxLength: 50, nullable: false),
+                    SURNAME = table.Column<string>(maxLength: 50, nullable: false),
+                    BIRTH_DATE = table.Column<DateTime>(type: "datetime", nullable: false),
+                    MOBILE_NO = table.Column<string>(maxLength: 20, nullable: false),
                     GENDER = table.Column<int>(nullable: false),
                     BALANCE = table.Column<decimal>(nullable: false)
                 },
@@ -301,7 +325,8 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                     OTP_ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     OTP = table.Column<string>(maxLength: 10, nullable: false),
-                    TYPE = table.Column<int>(nullable: false)
+                    TYPE = table.Column<int>(nullable: false),
+                    REFERENCE = table.Column<string>(maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -453,6 +478,11 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 column: "USER_ID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OTP_FOR_REGIS_ACTIVE_STATUS",
+                table: "OTP_FOR_REGIS",
+                column: "ACTIVE_STATUS");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OTP_MANAGEMENT_ACTIVE_STATUS",
                 table: "OTP_MANAGEMENT",
                 column: "ACTIVE_STATUS");
@@ -520,6 +550,9 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "MERCHANT_USER_TRANSACTIONS");
+
+            migrationBuilder.DropTable(
+                name: "OTP_FOR_REGIS");
 
             migrationBuilder.DropTable(
                 name: "OTP_MANAGEMENT");
