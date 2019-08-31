@@ -29,18 +29,22 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
 
             builder.Property(entity => entity.Name)
                 .HasColumnName("NAME")
+                .IsRequired()
                 .HasMaxLength(50);
 
             builder.Property(entity => entity.Surname)
                 .HasColumnName("SURNAME")
+                .IsRequired()
                 .HasMaxLength(50);
 
             builder.Property(entity => entity.BirthDate)
                 .HasColumnName("BIRTH_DATE")
+                .IsRequired()
                 .HasColumnType("datetime");
 
             builder.Property(entity => entity.MobileNo)
                 .HasColumnName("MOBILE_NO")
+                .IsRequired()
                 .HasMaxLength(20);
 
             builder.Property(entity => entity.Gender).HasColumnName("GENDER");
