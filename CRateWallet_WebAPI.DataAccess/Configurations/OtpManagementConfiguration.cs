@@ -49,9 +49,9 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
                 .HasColumnName("ACTIVE_STATUS");
 
             builder.HasOne(entity => entity.ActiveDescription)
-                .WithOne(entity => entity.OtpManagement)
+                .WithMany(entity => entity.OtpManagement)
                 .OnDelete(DeleteBehavior.Restrict)
-                .HasForeignKey<OtpManagement>(entity => entity.ActiveStatus);
+                .HasForeignKey(entity => entity.ActiveStatus);
         }
     }
 }

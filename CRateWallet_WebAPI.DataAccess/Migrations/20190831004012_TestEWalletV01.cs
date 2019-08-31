@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CRateWallet_WebAPI.DataAccess.Migrations
 {
-    public partial class EWalletV01 : Migration
+    public partial class TestEWalletV01 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -144,7 +144,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         column: x => x.ADMIN_ID,
                         principalTable: "ADMIN",
                         principalColumn: "ADMIN_ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -179,7 +179,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         column: x => x.GENDER,
                         principalTable: "GENDER_DESCRIPTION",
                         principalColumn: "GENDER",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -388,14 +388,12 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ADMIN_ACTIVE_STATUS",
                 table: "ADMIN",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ADMIN_TOKEN_ACTIVE_STATUS",
                 table: "ADMIN_TOKEN",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ADMIN_TOKEN_ADMIN_ID",
@@ -406,8 +404,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ADMIN_USER_TRANSACTIONS_ACTIVE_STATUS",
                 table: "ADMIN_USER_TRANSACTIONS",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ADMIN_USER_TRANSACTIONS_ADMIN_ID",
@@ -422,20 +419,17 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_GENDER_DESCRIPTION_ACTIVE_STATUS",
                 table: "GENDER_DESCRIPTION",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MERCHANT_ACTIVE_STATUS",
                 table: "MERCHANT",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MERCHANT_TOKEN_ACTIVE_STATUS",
                 table: "MERCHANT_TOKEN",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MERCHANT_TOKEN_MERCHANT_ID",
@@ -446,8 +440,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_MERCHANT_USER_TRANSACTIONS_ACTIVE_STATUS",
                 table: "MERCHANT_USER_TRANSACTIONS",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MERCHANT_USER_TRANSACTIONS_MERCHANT_ID",
@@ -462,8 +455,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_OTP_MANAGEMENT_ACTIVE_STATUS",
                 table: "OTP_MANAGEMENT",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OTP_MANAGEMENT_TYPE",
@@ -480,8 +472,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PIN_MANAGEMENT_ACTIVE_STATUS",
                 table: "PIN_MANAGEMENT",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PIN_MANAGEMENT_USER_ID",
@@ -492,26 +483,22 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_TYPE_OTP_MANAGEMENT_ACTIVE_STATUS",
                 table: "TYPE_OTP_MANAGEMENT",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_USER_ACTIVE_STATUS",
                 table: "USER",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_USER_GENDER",
                 table: "USER",
-                column: "GENDER",
-                unique: true);
+                column: "GENDER");
 
             migrationBuilder.CreateIndex(
                 name: "IX_USER_TOKEN_ACTIVE_STATUS",
                 table: "USER_TOKEN",
-                column: "ACTIVE_STATUS",
-                unique: true);
+                column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_USER_TOKEN_USER_ID",
