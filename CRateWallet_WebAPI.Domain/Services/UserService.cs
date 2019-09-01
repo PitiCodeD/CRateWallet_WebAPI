@@ -61,7 +61,7 @@ namespace CRateWallet_WebAPI.Domain.Services
                 return new ReturnDto<bool>()
                 {
                     Status = (int)StatusType.StatusRetureData.ShowMessage,
-                    Message = "OTP นี้ไม่มีในระบบ\nโปรดกด \"ส่ง OTP อีกครั้ง\" เพื่อรับ OTP อีกครั้ง"
+                    Message = "OTP ไม่ถูกต้อง"
                 };
             }
             else
@@ -71,7 +71,7 @@ namespace CRateWallet_WebAPI.Domain.Services
                     return new ReturnDto<bool>()
                     {
                         Status = (int)StatusType.StatusRetureData.ShowMessage,
-                        Message = "OTP ไม่สามารถใช้งานได้\nโปรดกด \"ส่ง OTP อีกครั้ง\" เพื่อรับ OTP อีกครั้ง"
+                        Message = "OTP ไม่สามารถใช้งานได้"
                     };
                 }
                 else if (checkOtp.UpdateDatetime.AddMinutes(15) < DateTime.UtcNow)
@@ -89,7 +89,7 @@ namespace CRateWallet_WebAPI.Domain.Services
                     return new ReturnDto<bool>()
                     {
                         Status = (int)StatusType.StatusRetureData.ShowMessage,
-                        Message = "OTP หมดอายุ\nโปรดกด \"ส่ง OTP อีกครั้ง\" เพื่อรับ OTP อีกครั้ง"
+                        Message = "OTP หมดอายุ"
                     };
                 }
                 else
