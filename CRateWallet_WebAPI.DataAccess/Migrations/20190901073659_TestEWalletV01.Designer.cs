@@ -4,14 +4,16 @@ using CRateWallet_WebAPI.DataAccess.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CRateWallet_WebAPI.DataAccess.Migrations
 {
     [DbContext(typeof(WalletContext))]
-    partial class WalletContextModelSnapshot : ModelSnapshot
+    [Migration("20190901073659_TestEWalletV01")]
+    partial class TestEWalletV01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -439,7 +441,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                     b.Property<int>("ActiveStatus")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("ACTIVE_STATUS")
-                        .HasDefaultValue(2);
+                        .HasDefaultValue(1);
 
                     b.Property<DateTime>("CreateDatetime")
                         .ValueGeneratedOnAddOrUpdate()
@@ -458,9 +460,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .HasMaxLength(20);
 
                     b.Property<int>("Type")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("TYPE")
-                        .HasDefaultValue(1);
+                        .HasColumnName("TYPE");
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
@@ -475,7 +475,8 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasIndex("ActiveStatus");
 
-                    b.HasIndex("Type");
+                    b.HasIndex("Type")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -504,7 +505,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                     b.Property<string>("Pin")
                         .IsRequired()
                         .HasColumnName("PIN")
-                        .HasMaxLength(100);
+                        .HasMaxLength(10);
 
                     b.Property<string>("Salt")
                         .IsRequired()
@@ -780,8 +781,8 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.TypeOtpManagement", "TypeOtpManagement")
-                        .WithMany("OtpManagement")
-                        .HasForeignKey("Type")
+                        .WithOne("OtpManagement")
+                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.OtpManagement", "Type")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.User", "User")

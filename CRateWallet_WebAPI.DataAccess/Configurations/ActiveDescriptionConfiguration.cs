@@ -29,7 +29,7 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
             builder.Property(entity => entity.UpdateDatetime)
                 .HasDefaultValueSql("GETUTCDATE()")
                 .HasColumnType("datetime")
-                .HasColumnName("UpdateTime");
+                .HasColumnName("UPDATE_DATETIME");
         }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRateWallet_WebAPI.DataAccess.Migrations
 {
     [DbContext(typeof(WalletContext))]
-    [Migration("20190831164550_TestEWalletV01")]
-    partial class TestEWalletV01
+    [Migration("20190901103128_TestEWalletV05")]
+    partial class TestEWalletV05
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,7 +40,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -62,7 +62,6 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .HasDefaultValue(1);
 
                     b.Property<string>("AdminAccountNo")
-                        .IsRequired()
                         .HasColumnName("ADMIN_ACCOUNT_NO")
                         .HasMaxLength(20);
 
@@ -84,7 +83,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -128,7 +127,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -179,7 +178,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -221,7 +220,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -251,7 +250,6 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("MerchantAccountNo")
-                        .IsRequired()
                         .HasColumnName("MERCHANT_ACCOUNT_NO")
                         .HasMaxLength(20);
 
@@ -272,7 +270,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -316,7 +314,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -369,7 +367,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -422,7 +420,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -443,7 +441,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                     b.Property<int>("ActiveStatus")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("ACTIVE_STATUS")
-                        .HasDefaultValue(1);
+                        .HasDefaultValue(2);
 
                     b.Property<DateTime>("CreateDatetime")
                         .ValueGeneratedOnAddOrUpdate()
@@ -462,11 +460,13 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .HasMaxLength(20);
 
                     b.Property<int>("Type")
-                        .HasColumnName("TYPE");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("TYPE")
+                        .HasDefaultValue(1);
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -477,8 +477,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasIndex("ActiveStatus");
 
-                    b.HasIndex("Type")
-                        .IsUnique();
+                    b.HasIndex("Type");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -507,7 +506,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                     b.Property<string>("Pin")
                         .IsRequired()
                         .HasColumnName("PIN")
-                        .HasMaxLength(10);
+                        .HasMaxLength(100);
 
                     b.Property<string>("Salt")
                         .IsRequired()
@@ -516,7 +515,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -558,7 +557,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -577,7 +576,6 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AccountNo")
-                        .IsRequired()
                         .HasColumnName("ACCOUNT_NO")
                         .HasMaxLength(20);
 
@@ -587,7 +585,9 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .HasDefaultValue(1);
 
                     b.Property<decimal>("Balance")
-                        .HasColumnName("BALANCE");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BALANCE")
+                        .HasDefaultValue(0m);
 
                     b.Property<DateTime?>("BirthDate")
                         .IsRequired()
@@ -625,7 +625,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -635,7 +635,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.HasIndex("Gender");
 
-                    b.ToTable("USER");
+                    b.ToTable("USER_WALLET");
                 });
 
             modelBuilder.Entity("CRateWallet_WebAPI.DataAccess.Models.UserToken", b =>
@@ -663,7 +663,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
 
                     b.Property<DateTime>("UpdateDatetime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UpdateTime")
+                        .HasColumnName("UPDATE_DATETIME")
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("GETUTCDATE()");
 
@@ -782,8 +782,8 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.TypeOtpManagement", "TypeOtpManagement")
-                        .WithOne("OtpManagement")
-                        .HasForeignKey("CRateWallet_WebAPI.DataAccess.Models.OtpManagement", "Type")
+                        .WithMany("OtpManagement")
+                        .HasForeignKey("Type")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CRateWallet_WebAPI.DataAccess.Models.User", "User")

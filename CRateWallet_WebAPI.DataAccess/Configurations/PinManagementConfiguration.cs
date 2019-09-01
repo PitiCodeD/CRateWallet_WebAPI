@@ -20,7 +20,7 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
             builder.Property(entity => entity.Pin)
                 .HasColumnName("PIN")
                 .IsRequired()
-                .HasMaxLength(10);
+                .HasMaxLength(100);
 
             builder.Property(entity => entity.Salt)
                 .HasColumnName("SALT")
@@ -41,7 +41,7 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
             builder.Property(entity => entity.UpdateDatetime)
                 .HasDefaultValueSql("GETUTCDATE()")
                 .HasColumnType("datetime")
-                .HasColumnName("UpdateTime");
+                .HasColumnName("UPDATE_DATETIME");
 
             builder.Property(entity => entity.ActiveStatus)
                 .HasDefaultValue(1)
