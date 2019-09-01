@@ -11,9 +11,11 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            string table = "USER_WALLET";
+
             builder.HasKey(entity => entity.UserId);
 
-            builder.ToTable("USER");
+            builder.ToTable(table);
 
             builder.Property(entity => entity.UserId).HasColumnName("USER_ID");
 
@@ -24,7 +26,6 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
 
             builder.Property(entity => entity.AccountNo)
                 .HasColumnName("ACCOUNT_NO")
-                .IsRequired()
                 .HasMaxLength(20);
 
             builder.Property(entity => entity.Name)
@@ -54,7 +55,9 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasForeignKey(entity => entity.Gender);
 
-            builder.Property(entity => entity.Balance).HasColumnName("BALANCE");
+            builder.Property(entity => entity.Balance)
+                .HasColumnName("BALANCE")
+                .HasDefaultValue(0m);
 
             builder.Property(entity => entity.CreateDatetime)
                 .HasDefaultValueSql("GETUTCDATE()")
@@ -64,7 +67,7 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
             builder.Property(entity => entity.UpdateDatetime)
                 .HasDefaultValueSql("GETUTCDATE()")
                 .HasColumnType("datetime")
-                .HasColumnName("UpdateTime");
+                .HasColumnName("UPDATE_DATETIME");
 
             builder.Property(entity => entity.ActiveStatus)
                 .HasDefaultValue(1)

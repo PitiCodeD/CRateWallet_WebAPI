@@ -14,6 +14,7 @@ namespace CRateWallet_WebAPI.Api
         {
             CreateMap<ReturnDto<string>, ResultModel<string>>();
             CreateMap<ReturnDto<bool>, ResultModel<bool>>();
+            CreateMap<ReturnDto<RegisDto>, ResultModel<RegisModel>>();
         }
     }
 }

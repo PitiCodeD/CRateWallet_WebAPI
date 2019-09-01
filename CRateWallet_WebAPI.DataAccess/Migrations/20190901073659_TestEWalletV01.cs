@@ -12,7 +12,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "ACTIVE_DESCRIPTION",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTVIE_STATUS = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
@@ -27,14 +27,14 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "ADMIN",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     USERNAME = table.Column<string>(maxLength: 20, nullable: false),
                     PASSWORD = table.Column<string>(maxLength: 20, nullable: false),
                     ADMIN_ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ADMIN_ACCOUNT_NO = table.Column<string>(maxLength: 20, nullable: false),
+                    ADMIN_ACCOUNT_NO = table.Column<string>(maxLength: 20, nullable: true),
                     ADMIN_NAME = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -52,7 +52,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "GENDER_DESCRIPTION",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     GENDER = table.Column<int>(nullable: false)
@@ -74,7 +74,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "MERCHANT",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     USERNAME = table.Column<string>(maxLength: 20, nullable: false),
@@ -82,7 +82,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                     MERCHANT_ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     PARTNERSHIP = table.Column<string>(maxLength: 100, nullable: false),
-                    MERCHANT_ACCOUNT_NO = table.Column<string>(maxLength: 20, nullable: false),
+                    MERCHANT_ACCOUNT_NO = table.Column<string>(maxLength: 20, nullable: true),
                     MERCHANT_NAME = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -100,7 +100,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "OTP_FOR_REGIS",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     OTP_ID = table.Column<int>(nullable: false)
@@ -124,7 +124,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "TYPE_OTP_MANAGEMENT",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     TYPE = table.Column<int>(nullable: false)
@@ -146,7 +146,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "ADMIN_TOKEN",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     TOKEN_ID = table.Column<int>(nullable: false)
@@ -172,34 +172,34 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "USER",
+                name: "USER_WALLET",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     USER_ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     EMAIL = table.Column<string>(maxLength: 100, nullable: false),
-                    ACCOUNT_NO = table.Column<string>(maxLength: 20, nullable: false),
+                    ACCOUNT_NO = table.Column<string>(maxLength: 20, nullable: true),
                     NAME = table.Column<string>(maxLength: 50, nullable: false),
                     SURNAME = table.Column<string>(maxLength: 50, nullable: false),
                     BIRTH_DATE = table.Column<DateTime>(type: "datetime", nullable: false),
                     MOBILE_NO = table.Column<string>(maxLength: 20, nullable: false),
                     GENDER = table.Column<int>(nullable: false),
-                    BALANCE = table.Column<decimal>(nullable: false)
+                    BALANCE = table.Column<decimal>(nullable: false, defaultValue: 0m)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_USER", x => x.USER_ID);
+                    table.PrimaryKey("PK_USER_WALLET", x => x.USER_ID);
                     table.ForeignKey(
-                        name: "FK_USER_ACTIVE_DESCRIPTION_ACTIVE_STATUS",
+                        name: "FK_USER_WALLET_ACTIVE_DESCRIPTION_ACTIVE_STATUS",
                         column: x => x.ACTIVE_STATUS,
                         principalTable: "ACTIVE_DESCRIPTION",
                         principalColumn: "ACTVIE_STATUS",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_USER_GENDER_DESCRIPTION_GENDER",
+                        name: "FK_USER_WALLET_GENDER_DESCRIPTION_GENDER",
                         column: x => x.GENDER,
                         principalTable: "GENDER_DESCRIPTION",
                         principalColumn: "GENDER",
@@ -210,7 +210,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "MERCHANT_TOKEN",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     TOKEN_ID = table.Column<int>(nullable: false)
@@ -239,7 +239,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "ADMIN_USER_TRANSACTIONS",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     USER_ID = table.Column<int>(nullable: false),
@@ -267,9 +267,9 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         principalColumn: "ADMIN_ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ADMIN_USER_TRANSACTIONS_USER_USER_ID",
+                        name: "FK_ADMIN_USER_TRANSACTIONS_USER_WALLET_USER_ID",
                         column: x => x.USER_ID,
-                        principalTable: "USER",
+                        principalTable: "USER_WALLET",
                         principalColumn: "USER_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -278,7 +278,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "MERCHANT_USER_TRANSACTIONS",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     USER_ID = table.Column<int>(nullable: false),
@@ -307,9 +307,9 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         principalColumn: "MERCHANT_ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MERCHANT_USER_TRANSACTIONS_USER_USER_ID",
+                        name: "FK_MERCHANT_USER_TRANSACTIONS_USER_WALLET_USER_ID",
                         column: x => x.USER_ID,
-                        principalTable: "USER",
+                        principalTable: "USER_WALLET",
                         principalColumn: "USER_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -318,7 +318,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "OTP_MANAGEMENT",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     USER_ID = table.Column<int>(nullable: false),
@@ -344,9 +344,9 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         principalColumn: "TYPE",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OTP_MANAGEMENT_USER_USER_ID",
+                        name: "FK_OTP_MANAGEMENT_USER_WALLET_USER_ID",
                         column: x => x.USER_ID,
-                        principalTable: "USER",
+                        principalTable: "USER_WALLET",
                         principalColumn: "USER_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -355,7 +355,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "PIN_MANAGEMENT",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     USER_ID = table.Column<int>(nullable: false),
@@ -374,9 +374,9 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         principalColumn: "ACTVIE_STATUS",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PIN_MANAGEMENT_USER_USER_ID",
+                        name: "FK_PIN_MANAGEMENT_USER_WALLET_USER_ID",
                         column: x => x.USER_ID,
-                        principalTable: "USER",
+                        principalTable: "USER_WALLET",
                         principalColumn: "USER_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -385,7 +385,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "USER_TOKEN",
                 columns: table => new
                 {
-                    UpdateTime = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    UPDATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CREATE_DATETIME = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ACTIVE_STATUS = table.Column<int>(nullable: false, defaultValue: 1),
                     TOKEN_ID = table.Column<int>(nullable: false)
@@ -403,9 +403,9 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                         principalColumn: "ACTVIE_STATUS",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_USER_TOKEN_USER_USER_ID",
+                        name: "FK_USER_TOKEN_USER_WALLET_USER_ID",
                         column: x => x.USER_ID,
-                        principalTable: "USER",
+                        principalTable: "USER_WALLET",
                         principalColumn: "USER_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -516,16 +516,6 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 column: "ACTIVE_STATUS");
 
             migrationBuilder.CreateIndex(
-                name: "IX_USER_ACTIVE_STATUS",
-                table: "USER",
-                column: "ACTIVE_STATUS");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_USER_GENDER",
-                table: "USER",
-                column: "GENDER");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_USER_TOKEN_ACTIVE_STATUS",
                 table: "USER_TOKEN",
                 column: "ACTIVE_STATUS");
@@ -535,6 +525,16 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 table: "USER_TOKEN",
                 column: "USER_ID",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_USER_WALLET_ACTIVE_STATUS",
+                table: "USER_WALLET",
+                column: "ACTIVE_STATUS");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_USER_WALLET_GENDER",
+                table: "USER_WALLET",
+                column: "GENDER");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -573,7 +573,7 @@ namespace CRateWallet_WebAPI.DataAccess.Migrations
                 name: "TYPE_OTP_MANAGEMENT");
 
             migrationBuilder.DropTable(
-                name: "USER");
+                name: "USER_WALLET");
 
             migrationBuilder.DropTable(
                 name: "GENDER_DESCRIPTION");

@@ -39,17 +39,17 @@ namespace CRateWallet_WebAPI.Api.Controllers
                     {
                         return new BadRequestObjectResult(new ResultModel<string>()
                         {
-                            Status = 3,
+                            Status = (int)StatusType.StatusRetureData.NotShowMessage,
                             Message = "Don't have return data from service"
                         });
                     }
                     else
                     {
-                        if (checkEmailResult.Status == 1)
+                        if (checkEmailResult.Status == (int)StatusType.StatusRetureData.Success)
                         {
                             return new OkObjectResult(_mapper.Map<ResultModel<string>>(checkEmailResult));
                         }
-                        else if(checkEmailResult.Status == 2)
+                        else if(checkEmailResult.Status == (int)StatusType.StatusRetureData.ShowMessage)
                         {
                             return new BadRequestObjectResult(_mapper.Map<ResultModel<string>>(checkEmailResult));
                         }
@@ -57,7 +57,7 @@ namespace CRateWallet_WebAPI.Api.Controllers
                         {
                             return new BadRequestObjectResult(new ResultModel<string>()
                             {
-                                Status = 3,
+                                Status = (int)StatusType.StatusRetureData.NotShowMessage,
                                 Message = "Server Code Errror!!!"
                             });
                         }
@@ -68,7 +68,7 @@ namespace CRateWallet_WebAPI.Api.Controllers
             {
                 return new BadRequestObjectResult(new ResultModel<string>()
                 {
-                    Status = 3,
+                    Status = (int)StatusType.StatusRetureData.NotShowMessage,
                     Message = e.ToString()
                 });
             }
@@ -92,17 +92,17 @@ namespace CRateWallet_WebAPI.Api.Controllers
                     {
                         return new BadRequestObjectResult(new ResultModel<bool>()
                         {
-                            Status = 3,
+                            Status = (int)StatusType.StatusRetureData.NotShowMessage,
                             Message = "Don't have return data from service"
                         });
                     }
                     else
                     {
-                        if (verifiedResult.Status == 1)
+                        if (verifiedResult.Status == (int)StatusType.StatusRetureData.Success)
                         {
                             return new OkObjectResult(_mapper.Map<ResultModel<bool>>(verifiedResult));
                         }
-                        else if (verifiedResult.Status == 2)
+                        else if (verifiedResult.Status == (int)StatusType.StatusRetureData.ShowMessage)
                         {
                             return new BadRequestObjectResult(_mapper.Map<ResultModel<bool>>(verifiedResult));
                         }
@@ -110,7 +110,7 @@ namespace CRateWallet_WebAPI.Api.Controllers
                         {
                             return new BadRequestObjectResult(new ResultModel<bool>()
                             {
-                                Status = 3,
+                                Status = (int)StatusType.StatusRetureData.NotShowMessage,
                                 Message = "Server Code Errror!!!"
                             });
                         }
@@ -121,7 +121,74 @@ namespace CRateWallet_WebAPI.Api.Controllers
             {
                 return new BadRequestObjectResult(new ResultModel<bool>()
                 {
-                    Status = 3,
+                    Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                    Message = e.ToString()
+                });
+            }
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody]RegisterSelectorModel registerSelector)
+        {
+            try
+            {
+                string email = registerSelector.Email;
+                string name = registerSelector.Name;
+                string surname = registerSelector.Surname;
+                DateTime birthDate = registerSelector.BirthDate;
+                string mobileNo = registerSelector.MobileNo;
+                int gender = registerSelector.Gender;
+                string pin = registerSelector.Pin;
+                string rePin = registerSelector.RePin;
+                if (pin != rePin)
+                {
+                    return new BadRequestObjectResult(new ResultModel<RegisModel>()
+                    {
+                        Status = (int)StatusType.StatusRetureData.ShowMessage,
+                        Message = "รหัสใหม่ที่ใส่ไม่ตรงกับรหัสก่อนหน้า"
+                    });
+                }
+                else
+                {
+                    var regisResult = await _userService.Register(email, name, surname, birthDate, mobileNo, gender, pin);
+                    if (regisResult == null)
+                    {
+                        return new BadRequestObjectResult(new ResultModel<RegisModel>()
+                        {
+                            Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                            Message = "Don't have return data from service"
+                        });
+                    }
+                    else
+                    {
+                        if (regisResult.Status == (int)StatusType.StatusRetureData.Success)
+                        {
+                            return new OkObjectResult(_mapper.Map<ResultModel<RegisModel>>(regisResult));
+                        }
+                        else if (regisResult.Status == (int)StatusType.StatusRetureData.ShowMessage)
+                        {
+                            return new BadRequestObjectResult(_mapper.Map<ResultModel<RegisModel>>(regisResult));
+                        }
+                        else if (regisResult.Status == (int)StatusType.StatusRetureData.BackToFirstPage)
+                        {
+                            return new BadRequestObjectResult(_mapper.Map<ResultModel<RegisModel>>(regisResult));
+                        }
+                        else
+                        {
+                            return new BadRequestObjectResult(new ResultModel<RegisModel>()
+                            {
+                                Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                                Message = "Server Code Errror!!!"
+                            });
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                return new BadRequestObjectResult(new ResultModel<RegisModel>()
+                {
+                    Status = (int)StatusType.StatusRetureData.NotShowMessage,
                     Message = e.ToString()
                 });
             }

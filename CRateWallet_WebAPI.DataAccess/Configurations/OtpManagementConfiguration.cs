@@ -22,7 +22,9 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
                 .IsRequired()
                 .HasMaxLength(10);
 
-            builder.Property(entity => entity.Type).HasColumnName("TYPE");
+            builder.Property(entity => entity.Type)
+                .HasColumnName("TYPE")
+                .HasDefaultValue(1);
 
             builder.HasOne(entity => entity.TypeOtpManagement)
                 .WithOne(entity => entity.OtpManagement)
@@ -47,10 +49,10 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
             builder.Property(entity => entity.UpdateDatetime)
                 .HasDefaultValueSql("GETUTCDATE()")
                 .HasColumnType("datetime")
-                .HasColumnName("UpdateTime");
+                .HasColumnName("UPDATE_DATETIME");
 
             builder.Property(entity => entity.ActiveStatus)
-                .HasDefaultValue(1)
+                .HasDefaultValue(2)
                 .HasColumnName("ACTIVE_STATUS");
 
             builder.HasOne(entity => entity.ActiveDescription)
