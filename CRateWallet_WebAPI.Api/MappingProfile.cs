@@ -13,6 +13,7 @@ namespace CRateWallet_WebAPI.Api
         public MappingProfile()
         {
             CreateMap<ReturnDto<string>, ResultModel<string>>();
+            CreateMap<ReturnDto<bool>, ResultModel<bool>>();
         }
     }
 }

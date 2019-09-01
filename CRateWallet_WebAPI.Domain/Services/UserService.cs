@@ -31,6 +31,19 @@ namespace CRateWallet_WebAPI.Domain.Services
             }
             string reference = RandomValue(6);
             string otp = RandomNumber(6);
+            var bannedEmail = (await _baseService.Read<OtpForRegis>()).Where(query => query.Email == email && query.ActiveStatus == 1).ToList();
+            foreach (var bannned in bannedEmail)
+            {
+                await _baseService.Update<OtpForRegis>(new OtpForRegis
+                {
+                    OtpId = bannned.OtpId,
+                    Email = bannned.Email,
+                    Reference = "Delete",
+                    Otp = "Delete",
+                    ActiveStatus = 2,
+                    UpdateDatetime = DateTime.UtcNow
+                }, bannned.OtpId);
+            }
             await _baseService.Create<OtpForRegis>(new OtpForRegis()
             {
                 Otp = otp,
@@ -44,6 +57,11 @@ namespace CRateWallet_WebAPI.Domain.Services
                 Message = "Success",
                 Data = reference
             };
+        }
+
+        public async Task<ReturnDto<bool>> CheckForRegis(string email, string otp)
+        {
+            throw new NotImplementedException();
         }
 
         private string RandomValue(int length)

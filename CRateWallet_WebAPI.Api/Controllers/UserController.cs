@@ -74,5 +74,57 @@ namespace CRateWallet_WebAPI.Api.Controllers
             }
         }
 
+        [HttpPost("checkemail")]
+        public async Task<IActionResult> VerifiedEmailForRegis([FromBody]VerifiedEmailSelectorModel verifiedEmailSelector)
+        {
+            try
+            {
+                string email = verifiedEmailSelector.Email;
+                string otp = verifiedEmailSelector.Otp;
+                if (false)
+                {
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    var verifiedResult = await _userService.CheckForRegis(email, otp);
+                    if (verifiedResult == null)
+                    {
+                        return new BadRequestObjectResult(new ResultModel<bool>()
+                        {
+                            Status = 3,
+                            Message = "Don't have return data from service"
+                        });
+                    }
+                    else
+                    {
+                        if (verifiedResult.Status == 1)
+                        {
+                            return new OkObjectResult(_mapper.Map<ResultModel<bool>>(verifiedResult));
+                        }
+                        else if (verifiedResult.Status == 2)
+                        {
+                            return new BadRequestObjectResult(_mapper.Map<ResultModel<bool>>(verifiedResult));
+                        }
+                        else
+                        {
+                            return new BadRequestObjectResult(new ResultModel<bool>()
+                            {
+                                Status = 3,
+                                Message = "Server Code Errror!!!"
+                            });
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                return new BadRequestObjectResult(new ResultModel<bool>()
+                {
+                    Status = 3,
+                    Message = e.ToString()
+                });
+            }
+        }
     }
 }
