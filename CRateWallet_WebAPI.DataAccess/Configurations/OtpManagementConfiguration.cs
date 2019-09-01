@@ -27,8 +27,8 @@ namespace CRateWallet_WebAPI.DataAccess.Configurations
                 .HasDefaultValue(1);
 
             builder.HasOne(entity => entity.TypeOtpManagement)
-                .WithOne(entity => entity.OtpManagement)
-                .HasForeignKey<OtpManagement>(entity => entity.Type);
+                .WithMany(entity => entity.OtpManagement)
+                .HasForeignKey(entity => entity.Type);
 
             builder.Property(entity => entity.Reference)
                 .HasColumnName("REFERENCE")

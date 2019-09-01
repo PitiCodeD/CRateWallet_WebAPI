@@ -136,6 +136,8 @@ namespace CRateWallet_WebAPI.Domain.Services
             else
             {
                 await UpDateAllOtpRegis(email);
+                int getLastId = (await _baseService.Read<User>()).Select(query => query.UserId).LastOrDefault() + 1;
+                string accountNo = GenerateAccountNo(StatusType.UserType.Customer, getLastId);
                 await _baseService.Create<User>(new User()
                 {
                     Email = email,
@@ -145,41 +147,60 @@ namespace CRateWallet_WebAPI.Domain.Services
                     MobileNo = mobileNo,
                     Gender = gender
                 });
-                var updateAccNo = (await _baseService.Read<User>()).LastOrDefault();
-                string accountNo = GenerateAccountNo(StatusType.UserType.Customer, updateAccNo.UserId);
-                await _baseService.Update<User>(new User()
+                var userData = (await _baseService.Read<User>()).Where(query => query.Email == email).SingleOrDefault();
+                if(userData == null)
                 {
-                    Email = updateAccNo.Email,
-                    Name = updateAccNo.Name,
-                    Surname = updateAccNo.Surname,
-                    BirthDate = updateAccNo.BirthDate,
-                    MobileNo = updateAccNo.MobileNo,
-                    Gender = updateAccNo.Gender,
-                    AccountNo = accountNo,
-                    UpdateDatetime = DateTime.UtcNow
-                }, updateAccNo.UserId);
-                var creatPass = GeneratePassword(pin);
-                await _baseService.Create<PinManagement>(new PinManagement()
+                    return new ReturnDto<RegisDto>()
+                    {
+                        Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                        Message = "This User id " + userData.UserId + " have a problem can't input to database"
+                    };
+                }
+                else
                 {
-                    UserId = updateAccNo.UserId,
-                    Pin = creatPass.HashPass,
-                    Salt = creatPass.Salt
-                });
-                await _baseService.Create<OtpManagement>(new OtpManagement()
-                {
-                    UserId = updateAccNo.UserId,
-                    Otp = "Delete",
-                    Reference = "Delete"
-                });
-                string refreshToken = RandomValue(20);
-                await _baseService.Create<UserToken>(new UserToken()
-                {
-                    RefreshToken = refreshToken,
-                    UserId = updateAccNo.UserId
-                });
-
+                    if (getLastId != userData.UserId)
+                    {
+                        return new ReturnDto<RegisDto>()
+                        {
+                            Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                            Message = "This User id " + userData.UserId + " have a problem please delete in database"
+                        };
+                    }
+                    else
+                    {
+                        var creatPass = GeneratePassword(pin);
+                        await _baseService.Create<PinManagement>(new PinManagement()
+                        {
+                            UserId = userData.UserId,
+                            Pin = creatPass.HashPass,
+                            Salt = creatPass.Salt
+                        });
+                        await _baseService.Create<OtpManagement>(new OtpManagement()
+                        {
+                            UserId = userData.UserId,
+                            Otp = "Delete",
+                            Reference = "Delete"
+                        });
+                        string refreshToken = RandomValue(20);
+                        await _baseService.Create<UserToken>(new UserToken()
+                        {
+                            RefreshToken = refreshToken,
+                            UserId = userData.UserId
+                        });
+                        string accessToken = GetToken(email);
+                        return new ReturnDto<RegisDto>()
+                        {
+                            Status = (int)StatusType.StatusRetureData.Success,
+                            Message = "สำเร็จเรียบร้อย",
+                            Data = new RegisDto()
+                            {
+                                AccessToken = accessToken,
+                                RefreshToken = refreshToken
+                            }
+                        };
+                    }
+                }
             }
-            throw new NotImplementedException();
         }
 
         private string RandomValue(int length)
@@ -319,7 +340,7 @@ Thank you CRateWallet"
 
         private string GenerateAccountNo(StatusType.UserType type, int id)
         {
-            return $"{type}-000-" + GenerateAccountUserNo(id);
+            return $"{(int)type}-000-" + GenerateAccountUserNo(id);
         }
 
         private string GenerateAccountUserNo(int id)
@@ -362,11 +383,11 @@ Thank you CRateWallet"
             };
         }
 
-        private string GetToken(string email)
+        private string GetToken(string username)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], email, expires: DateTime.UtcNow.AddMinutes(Int32.Parse(_configuration["Jwt:Expire"])), signingCredentials: credentials);
+            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], username, expires: DateTime.UtcNow.AddMinutes(Int32.Parse(_configuration["Jwt:Expire"])), signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

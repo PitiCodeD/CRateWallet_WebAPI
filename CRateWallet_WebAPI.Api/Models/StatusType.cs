@@ -9,6 +9,7 @@ namespace CRateWallet_WebAPI.Api.Models
     {
         public enum UserType
         {
+            Null,
             Customer,
             Merchant,
             Admin
@@ -16,10 +17,11 @@ namespace CRateWallet_WebAPI.Api.Models
 
         public enum StatusRetureData
         {
+            Null,
             Success,
             ShowMessage,
             NotShowMessage,
-            BackToFirstPage
+            BackToFirstPage,
         }
     }
 }

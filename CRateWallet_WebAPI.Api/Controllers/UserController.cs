@@ -173,6 +173,10 @@ namespace CRateWallet_WebAPI.Api.Controllers
                         {
                             return new BadRequestObjectResult(_mapper.Map<ResultModel<RegisModel>>(regisResult));
                         }
+                        else if (regisResult.Status == (int)StatusType.StatusRetureData.NotShowMessage)
+                        {
+                            return new BadRequestObjectResult(_mapper.Map<ResultModel<RegisModel>>(regisResult));
+                        }
                         else
                         {
                             return new BadRequestObjectResult(new ResultModel<RegisModel>()
