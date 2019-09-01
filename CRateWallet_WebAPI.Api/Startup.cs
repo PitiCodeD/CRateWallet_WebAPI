@@ -87,7 +87,8 @@ namespace CRateWallet_WebAPI.Api
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            //app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
