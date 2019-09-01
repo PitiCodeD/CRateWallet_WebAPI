@@ -26,24 +26,12 @@ namespace CRateWallet_WebAPI.Domain.Services
                 return new ReturnDto<string>()
                 {
                     Status = 2,
-                    Message = "This email has already been used."
+                    Message = "อีเมลนี้ถถูกใช้งานแล้ว"
                 };
             }
             string reference = RandomValue(6);
             string otp = RandomNumber(6);
-            var bannedEmail = (await _baseService.Read<OtpForRegis>()).Where(query => query.Email == email && query.ActiveStatus == 1).ToList();
-            foreach (var bannned in bannedEmail)
-            {
-                await _baseService.Update<OtpForRegis>(new OtpForRegis
-                {
-                    OtpId = bannned.OtpId,
-                    Email = bannned.Email,
-                    Reference = "Delete",
-                    Otp = "Delete",
-                    ActiveStatus = 2,
-                    UpdateDatetime = DateTime.UtcNow
-                }, bannned.OtpId);
-            }
+            await UpDateOtpRegis(email);
             await _baseService.Create<OtpForRegis>(new OtpForRegis()
             {
                 Otp = otp,
@@ -54,14 +42,59 @@ namespace CRateWallet_WebAPI.Domain.Services
             return new ReturnDto<string>()
             {
                 Status = 1,
-                Message = "Success",
+                Message = "สำเร็จเรียบร้อย",
                 Data = reference
             };
         }
 
         public async Task<ReturnDto<bool>> CheckForRegis(string email, string otp)
         {
-            throw new NotImplementedException();
+            var checkOtp = (await _baseService.Read<OtpForRegis>()).Where(query => query.Email == email && query.Otp == otp).SingleOrDefault();
+            if(checkOtp == default)
+            {
+                return new ReturnDto<bool>()
+                {
+                    Status = 2,
+                    Message = "OTP นี้ไม่มีในระบบ\nโปรดกด \"ส่ง OTP อีกครั้ง\" เพื่อรับ OTP อีกครั้ง"
+                };
+            }
+            else
+            {
+                if(checkOtp.ActiveStatus == 2)
+                {
+                    return new ReturnDto<bool>()
+                    {
+                        Status = 2,
+                        Message = "OTP ไม่สามารถใช้งานได้\nโปรดกด \"ส่ง OTP อีกครั้ง\" เพื่อรับ OTP อีกครั้ง"
+                    };
+                }
+                else if (checkOtp.UpdateDatetime.AddMinutes(15) < DateTime.UtcNow)
+                {
+                    return new ReturnDto<bool>()
+                    {
+                        Status = 2,
+                        Message = "OTP หมดอายุ\nโปรดกด \"ส่ง OTP อีกครั้ง\" เพื่อรับ OTP อีกครั้ง"
+                    };
+                }
+                else
+                {
+                    await _baseService.Update<OtpForRegis>(new OtpForRegis
+                    {
+                        OtpId = checkOtp.OtpId,
+                        Email = checkOtp.Email,
+                        Reference = "Delete",
+                        Otp = "Delete",
+                        ActiveStatus = 3,
+                        UpdateDatetime = DateTime.UtcNow
+                    }, checkOtp.OtpId);
+                    await UpDateOtpRegis(email);
+                    return new ReturnDto<bool>()
+                    {
+                        Status = 1,
+                        Message = "สำเร็จเรียบร้อย"
+                    };
+                }
+            }
         }
 
         private string RandomValue(int length)
@@ -163,6 +196,23 @@ Thank you CRateWallet"
             SmtpServer.Credentials = new System.Net.NetworkCredential("622707130011@dpu.ac.th", "1101700205967");
             SmtpServer.EnableSsl = true;
             SmtpServer.Send(mail);
+        }
+
+        private async Task UpDateOtpRegis(string email)
+        {
+            var bannedEmail = (await _baseService.Read<OtpForRegis>()).Where(query => query.Email == email && query.ActiveStatus == 1).ToList();
+            foreach (var bannned in bannedEmail)
+            {
+                await _baseService.Update<OtpForRegis>(new OtpForRegis
+                {
+                    OtpId = bannned.OtpId,
+                    Email = bannned.Email,
+                    Reference = "Delete",
+                    Otp = "Delete",
+                    ActiveStatus = 2,
+                    UpdateDatetime = DateTime.UtcNow
+                }, bannned.OtpId);
+            }
         }
     }
 }
