@@ -70,6 +70,16 @@ namespace CRateWallet_WebAPI.Domain.Services
                 }
                 else if (checkOtp.UpdateDatetime.AddMinutes(15) < DateTime.UtcNow)
                 {
+                    await _baseService.Update<OtpForRegis>(new OtpForRegis
+                    {
+                        OtpId = checkOtp.OtpId,
+                        Email = checkOtp.Email,
+                        Reference = "Delete",
+                        Otp = "Delete",
+                        ActiveStatus = 2,
+                        UpdateDatetime = DateTime.UtcNow
+                    }, checkOtp.OtpId);
+                    await UpDateOtpRegis(email);
                     return new ReturnDto<bool>()
                     {
                         Status = 2,
