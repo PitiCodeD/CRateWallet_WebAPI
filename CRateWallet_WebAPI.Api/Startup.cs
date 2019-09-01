@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CRateWallet_WebAPI.DataAccess.Contexts;
+using CRateWallet_WebAPI.DataAccess.Interfaces;
+using CRateWallet_WebAPI.DataAccess.Repositories;
+using CRateWallet_WebAPI.Domain.Interfaces;
+using CRateWallet_WebAPI.Domain.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,6 +33,12 @@ namespace CRateWallet_WebAPI.Api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<WalletContext>();
+
+            services.AddScoped<IBaseRepository, BaseRepository>();
+
+            services.AddScoped<IBaseService, BaseService>();
+
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

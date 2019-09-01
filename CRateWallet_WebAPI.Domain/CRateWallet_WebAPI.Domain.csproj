@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\CRateWallet_WebAPI.DataAccess\CRateWallet_WebAPI.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
