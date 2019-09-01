@@ -137,67 +137,79 @@ namespace CRateWallet_WebAPI.Domain.Services
             {
                 await UpDateAllOtpRegis(email);
                 int getLastId = (await _baseService.Read<User>()).Select(query => query.UserId).LastOrDefault() + 1;
-                string accountNo = GenerateAccountNo(StatusType.UserType.Customer, getLastId);
-                await _baseService.Create<User>(new User()
-                {
-                    Email = email,
-                    Name = name,
-                    Surname = surname,
-                    BirthDate = birthDate,
-                    MobileNo = mobileNo,
-                    Gender = gender
-                });
-                var userData = (await _baseService.Read<User>()).Where(query => query.Email == email).SingleOrDefault();
-                if(userData == null)
+                if(getLastId > 999999)
                 {
                     return new ReturnDto<RegisDto>()
                     {
-                        Status = (int)StatusType.StatusRetureData.NotShowMessage,
-                        Message = "This User id " + userData.UserId + " have a problem can't input to database"
+                        Status = (int)StatusType.StatusRetureData.BackToFirstPage,
+                        Message = "Data base Full"
                     };
                 }
                 else
                 {
-                    if (getLastId != userData.UserId)
+                    string accountNo = GenerateAccountNo(StatusType.UserType.Customer, getLastId);
+                    await _baseService.Create<User>(new User()
+                    {
+                        Email = email,
+                        Name = name,
+                        Surname = surname,
+                        BirthDate = birthDate,
+                        MobileNo = mobileNo,
+                        AccountNo = accountNo,
+                        Gender = gender
+                    });
+                    var userData = (await _baseService.Read<User>()).Where(query => query.Email == email).SingleOrDefault();
+                    if (userData == null)
                     {
                         return new ReturnDto<RegisDto>()
                         {
                             Status = (int)StatusType.StatusRetureData.NotShowMessage,
-                            Message = "This User id " + userData.UserId + " have a problem please delete in database"
+                            Message = "This User id " + userData.UserId + " have a problem can't input to database"
                         };
                     }
                     else
                     {
-                        var creatPass = GeneratePassword(pin);
-                        await _baseService.Create<PinManagement>(new PinManagement()
+                        if (getLastId != userData.UserId)
                         {
-                            UserId = userData.UserId,
-                            Pin = creatPass.HashPass,
-                            Salt = creatPass.Salt
-                        });
-                        await _baseService.Create<OtpManagement>(new OtpManagement()
-                        {
-                            UserId = userData.UserId,
-                            Otp = "Delete",
-                            Reference = "Delete"
-                        });
-                        string refreshToken = RandomValue(20);
-                        await _baseService.Create<UserToken>(new UserToken()
-                        {
-                            RefreshToken = refreshToken,
-                            UserId = userData.UserId
-                        });
-                        string accessToken = GetToken(email);
-                        return new ReturnDto<RegisDto>()
-                        {
-                            Status = (int)StatusType.StatusRetureData.Success,
-                            Message = "สำเร็จเรียบร้อย",
-                            Data = new RegisDto()
+                            return new ReturnDto<RegisDto>()
                             {
-                                AccessToken = accessToken,
-                                RefreshToken = refreshToken
-                            }
-                        };
+                                Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                                Message = "This User id " + userData.UserId + " have a problem please delete in database"
+                            };
+                        }
+                        else
+                        {
+                            var creatPass = GeneratePassword(pin);
+                            await _baseService.Create<PinManagement>(new PinManagement()
+                            {
+                                UserId = userData.UserId,
+                                Pin = creatPass.HashPass,
+                                Salt = creatPass.Salt
+                            });
+                            await _baseService.Create<OtpManagement>(new OtpManagement()
+                            {
+                                UserId = userData.UserId,
+                                Otp = "Delete",
+                                Reference = "Delete"
+                            });
+                            string refreshToken = RandomValue(20);
+                            await _baseService.Create<UserToken>(new UserToken()
+                            {
+                                RefreshToken = refreshToken,
+                                UserId = userData.UserId
+                            });
+                            string accessToken = GetToken(email);
+                            return new ReturnDto<RegisDto>()
+                            {
+                                Status = (int)StatusType.StatusRetureData.Success,
+                                Message = "สำเร็จเรียบร้อย",
+                                Data = new RegisDto()
+                                {
+                                    AccessToken = accessToken,
+                                    RefreshToken = refreshToken
+                                }
+                            };
+                        }
                     }
                 }
             }
