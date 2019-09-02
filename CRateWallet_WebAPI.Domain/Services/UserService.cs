@@ -208,6 +208,10 @@ namespace CRateWallet_WebAPI.Domain.Services
             {
                 await UpDateAllOtpRegis(email);
                 int getLastId = (await _baseService.Read<User>()).Select(query => query.UserId).LastOrDefault() + 1;
+                if(getLastId == default)
+                {
+                    getLastId = 1;
+                }
                 if(getLastId > 999999)
                 {
                     return new ReturnDto<RegisDto>()
