@@ -27,30 +27,101 @@ namespace CRateWallet_WebAPI.Domain.Services
         public async Task<ReturnDto<string>> CheckEmailForRegis(string email)
         {
             int checkEmail = (await _baseService.Read<User>()).Where(query => query.Email == email).Count();
-            if(checkEmail != 0)
+            if(checkEmail == 1)
             {
+                var dataUser = (await _baseService.Read<User>()).Where(query => query.Email == email).Single();
+                if(dataUser.ActiveStatus == 2)
+                {
+                    return new ReturnDto<string>()
+                    {
+                        Status = (int)StatusType.StatusRetureData.ShowMessage,
+                        Message = "อีเมล์ไม่สามารถใช้งานแอพพลิเคชั่นนี้ได้โปรดติดต่อเจ้าหน้าที่"
+                    };
+                }
+                else
+                {
+                    var dataOtp = (await _baseService.Read<OtpManagement>()).Where(query => query.UserId == dataUser.UserId).Single();
+                    await _baseService.Update<User>(new User()
+                    {
+                        UserId = dataUser.UserId,
+                        Balance = dataUser.Balance,
+                        Email = dataUser.Email,
+                        Name = dataUser.Name,
+                        Surname = dataUser.Surname,
+                        BirthDate = dataUser.BirthDate,
+                        MobileNo = dataUser.MobileNo,
+                        AccountNo = dataUser.AccountNo,
+                        Gender = dataUser.Gender,
+                        ActiveStatus = 3,
+                        UpdateDatetime = DateTime.UtcNow
+                    }, dataUser.UserId);
+                    string reference = RandomValue(6);
+                    string otp = RandomNumber(6);
+                    await _baseService.Update<OtpManagement>(new OtpManagement()
+                    {
+                        OtpId = dataOtp.OtpId,
+                        UserId = dataOtp.UserId,
+                        Otp = otp,
+                        Type = 2,
+                        Reference = reference,
+                        ActiveStatus = 1,
+                        UpdateDatetime = DateTime.UtcNow
+                    }, dataOtp.OtpId);
+                    SentEmailMethod(email, 2, reference, otp);
+                    return new ReturnDto<string>()
+                    {
+                        Status = (int)StatusType.StatusRetureData.SecondLogin,
+                        Message = "สำเร็จเรียบร้อย",
+                        Data = reference
+                    };
+                }
+                
+            }
+            else if(checkEmail > 1)
+            {
+                var changeEmail = (await _baseService.Read<User>()).Where(query => query.Email == email).ToList();
+                foreach(var thisEmail in changeEmail)
+                {
+                    await _baseService.Update<User>(new User()
+                    {
+                        UserId = thisEmail.UserId,
+                        Balance = thisEmail.Balance,
+                        Email = thisEmail.Email,
+                        Name = thisEmail.Name,
+                        Surname = thisEmail.Surname,
+                        BirthDate = thisEmail.BirthDate,
+                        MobileNo = thisEmail.MobileNo,
+                        AccountNo = thisEmail.AccountNo,
+                        Gender = thisEmail.Gender,
+                        ActiveStatus = 2,
+                        UpdateDatetime = DateTime.UtcNow
+                    }, thisEmail.UserId);
+                }
                 return new ReturnDto<string>()
                 {
                     Status = (int)StatusType.StatusRetureData.ShowMessage,
-                    Message = "อีเมลนี้ถถูกใช้งานแล้ว"
+                    Message = "อีเมล์ของคุณเกิดปัญหาโปรดติดต่อผู้ดูแลโดยด่วน"
                 };
             }
-            string reference = RandomValue(6);
-            string otp = RandomNumber(6);
-            await UpDateOtpRegis(email);
-            await _baseService.Create<OtpForRegis>(new OtpForRegis()
+            else
             {
-                Otp = otp,
-                Email = email,
-                Reference = reference
-            });
-            SentEmailMethod(email, 3, reference, otp);
-            return new ReturnDto<string>()
-            {
-                Status = (int)StatusType.StatusRetureData.Success,
-                Message = "สำเร็จเรียบร้อย",
-                Data = reference
-            };
+                string reference = RandomValue(6);
+                string otp = RandomNumber(6);
+                await UpDateOtpRegis(email);
+                await _baseService.Create<OtpForRegis>(new OtpForRegis()
+                {
+                    Otp = otp,
+                    Email = email,
+                    Reference = reference
+                });
+                SentEmailMethod(email, 2, reference, otp);
+                return new ReturnDto<string>()
+                {
+                    Status = (int)StatusType.StatusRetureData.Success,
+                    Message = "สำเร็จเรียบร้อย",
+                    Data = reference
+                };
+            }
         }
 
         public async Task<ReturnDto<bool>> CheckForRegis(string email, string otp)
@@ -192,27 +263,140 @@ namespace CRateWallet_WebAPI.Domain.Services
                                 Otp = "Delete",
                                 Reference = "Delete"
                             });
-                            string refreshToken = RandomValue(20);
+                            var dataToken = GetAllToken(email, userData.AccountNo);
                             await _baseService.Create<UserToken>(new UserToken()
                             {
-                                RefreshToken = refreshToken,
+                                RefreshToken = dataToken.RefreshToken,
                                 UserId = userData.UserId
                             });
-                            string accessToken = GetToken(email);
                             return new ReturnDto<RegisDto>()
                             {
                                 Status = (int)StatusType.StatusRetureData.Success,
                                 Message = "สำเร็จเรียบร้อย",
-                                Data = new RegisDto()
-                                {
-                                    AccessToken = accessToken,
-                                    RefreshToken = refreshToken
-                                }
+                                Data = dataToken
                             };
                         }
                     }
                 }
             }
+        }
+
+        public async Task<ReturnDto<bool>> CheckForChangePin(string email, string otp)
+        {
+            var checkEmail = (await _baseService.Read<User>()).Where(query => query.Email == email).SingleOrDefault();
+            var checkOtp = (await _baseService.Read<OtpManagement>()).Where(query => query.UserId == checkEmail.UserId && query.Otp == otp).SingleOrDefault();
+            if (checkOtp == default)
+            {
+                return new ReturnDto<bool>()
+                {
+                    Status = (int)StatusType.StatusRetureData.ShowMessage,
+                    Message = "OTP ไม่ถูกต้อง"
+                };
+            }
+            else
+            {
+                if (checkOtp.ActiveStatus == 2)
+                {
+                    return new ReturnDto<bool>()
+                    {
+                        Status = (int)StatusType.StatusRetureData.ShowMessage,
+                        Message = "OTP ไม่สามารถใช้งานได้"
+                    };
+                }
+                else if (checkOtp.UpdateDatetime.AddMinutes(15) < DateTime.UtcNow)
+                {
+                    await _baseService.Update<OtpManagement>(new OtpManagement
+                    {
+                        OtpId = checkOtp.OtpId,
+                        UserId = checkOtp.UserId,
+                        Reference = "Delete",
+                        Otp = "Delete",
+                        ActiveStatus = 2,
+                        Type = 1,
+                        UpdateDatetime = DateTime.UtcNow
+                    }, checkOtp.OtpId);
+                    return new ReturnDto<bool>()
+                    {
+                        Status = (int)StatusType.StatusRetureData.ShowMessage,
+                        Message = "OTP หมดอายุ"
+                    };
+                }
+                else
+                {
+                    await _baseService.Update<OtpManagement>(new OtpManagement
+                    {
+                        OtpId = checkOtp.OtpId,
+                        UserId = checkOtp.UserId,
+                        Reference = "Delete",
+                        Otp = "Delete",
+                        ActiveStatus = 3,
+                        Type = 1,
+                        UpdateDatetime = DateTime.UtcNow
+                    }, checkOtp.OtpId);
+                    await UpDateOtpRegis(email);
+                    return new ReturnDto<bool>()
+                    {
+                        Status = (int)StatusType.StatusRetureData.Success,
+                        Message = "สำเร็จเรียบร้อย"
+                    };
+                }
+            }
+        }
+
+        public async Task<ReturnDto<RegisDto>> ChangePin(string email, string pin)
+        {
+            var checkEmail = (await _baseService.Read<User>()).Where(query => query.Email == email && query.ActiveStatus == 3).SingleOrDefault();
+            var checkOtp = (await _baseService.Read<OtpManagement>()).Where(query => query.UserId == checkEmail.UserId && query.ActiveStatus == 3).SingleOrDefault();
+            if (checkEmail == default || checkOtp == default)
+            {
+                return new ReturnDto<RegisDto>()
+                {
+                    Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                    Message = "This Email " + email + " have a problem please contact this Email urgently"
+                };
+            }
+            else
+            {
+                var checkPin = (await _baseService.Read<PinManagement>()).Where(query => query.UserId == checkEmail.UserId && query.ActiveStatus == 3).Single();
+                var checkToken = (await _baseService.Read<UserToken>()).Where(query => query.UserId == checkEmail.UserId).Single();
+                var creatPass = GeneratePassword(pin);
+                await _baseService.Update<PinManagement>(new PinManagement()
+                {
+                    PinId = checkPin.PinId,
+                    UserId = checkPin.UserId,
+                    Pin = creatPass.HashPass,
+                    Salt = creatPass.Salt,
+                    ActiveStatus = 1,
+                    UpdateDatetime = DateTime.UtcNow
+                }, checkPin.PinId);
+                await _baseService.Update<OtpManagement>(new OtpManagement
+                {
+                    OtpId = checkOtp.OtpId,
+                    UserId = checkOtp.UserId,
+                    Reference = "Delete",
+                    Otp = "Delete",
+                    ActiveStatus = 2,
+                    Type = 1,
+                    UpdateDatetime = DateTime.UtcNow
+                }, checkOtp.OtpId);
+                var dataToken = GetAllToken(email, checkEmail.AccountNo);
+                await _baseService.Update<UserToken>(new UserToken()
+                {
+                    TokenId = checkToken.TokenId
+                    RefreshToken = dataToken.RefreshToken,
+                    UserId = checkToken.UserId,
+                    ActiveStatus = 1,
+                    UpdateDatetime = DateTime.UtcNow
+
+                }, checkToken.UserId);
+                return new ReturnDto<RegisDto>()
+                {
+                    Status = (int)StatusType.StatusRetureData.Success,
+                    Message = "สำเร็จเรียบร้อย",
+                    Data = dataToken
+                };
+            }
+            throw new NotImplementedException();
         }
 
         private string RandomValue(int length)
@@ -282,7 +466,7 @@ namespace CRateWallet_WebAPI.Domain.Services
             {
                 new SentEmailDto()
                 {
-                    SentEmailId = 3,
+                    SentEmailId = 2,
                     Title = "OTP for verify oneself your e-mail",
                     Description = $@"OTP for Verify oneself your E-mail in CRateWallet application
 Reference : {refe}
@@ -293,7 +477,7 @@ Thank you CRateWallet"
                 },
                 new SentEmailDto()
                 {
-                    SentEmailId = 2,
+                    SentEmailId = 1,
                     Title = "OTP for verify oneself your password",
                     Description = $@"OTP for Verify oneself your password in CRateWallet application
 Reference : {refe}
@@ -395,12 +579,23 @@ Thank you CRateWallet"
             };
         }
 
-        private string GetToken(string username)
+        private string GetToken(string username, string accountNo)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], username, expires: DateTime.UtcNow.AddMinutes(Int32.Parse(_configuration["Jwt:Expire"])), signingCredentials: credentials);
+            var token = new JwtSecurityToken(_configuration["Jwt:Issuer"], username+"*"+accountNo, expires: DateTime.UtcNow.AddMinutes(Int32.Parse(_configuration["Jwt:Expire"])), signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private RegisDto GetAllToken(string username, string accountNo)
+        {
+            string refreshToken = RandomValue(20);
+            string accessToken = GetToken(username, accountNo);
+            return new RegisDto()
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
         }
     }
 }

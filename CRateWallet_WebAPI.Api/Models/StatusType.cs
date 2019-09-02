@@ -22,6 +22,7 @@ namespace CRateWallet_WebAPI.Api.Models
             ShowMessage,
             NotShowMessage,
             BackToFirstPage,
+            SecondLogin
         }
     }
 }

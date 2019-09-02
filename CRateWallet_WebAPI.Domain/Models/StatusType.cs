@@ -20,7 +20,8 @@ namespace CRateWallet_WebAPI.Domain.Models
             Success,
             ShowMessage,
             NotShowMessage,
-            BackToFirstPage
+            BackToFirstPage,
+            SecondLogin
         }
     }
 }

@@ -53,6 +53,10 @@ namespace CRateWallet_WebAPI.Api.Controllers
                         {
                             return new BadRequestObjectResult(_mapper.Map<ResultModel<string>>(checkEmailResult));
                         }
+                        else if (checkEmailResult.Status == (int)StatusType.StatusRetureData.SecondLogin)
+                        {
+                            return new BadRequestObjectResult(_mapper.Map<ResultModel<string>>(checkEmailResult));
+                        }
                         else
                         {
                             return new BadRequestObjectResult(new ResultModel<string>()
@@ -189,6 +193,125 @@ namespace CRateWallet_WebAPI.Api.Controllers
                 }
             }
             catch(Exception e)
+            {
+                return new BadRequestObjectResult(new ResultModel<RegisModel>()
+                {
+                    Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                    Message = e.ToString()
+                });
+            }
+        }
+
+        [HttpPost("checkemailpin")]
+        public async Task<IActionResult> VerifiedEmailForChangePin([FromBody]VerifiedEmailSelectorModel verifiedEmailSelector)
+        {
+            try
+            {
+                string email = verifiedEmailSelector.Email;
+                string otp = verifiedEmailSelector.Otp;
+                if (false)
+                {
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    var verifiedResult = await _userService.CheckForChangePin(email, otp);
+                    if (verifiedResult == null)
+                    {
+                        return new BadRequestObjectResult(new ResultModel<bool>()
+                        {
+                            Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                            Message = "Don't have return data from service"
+                        });
+                    }
+                    else
+                    {
+                        if (verifiedResult.Status == (int)StatusType.StatusRetureData.Success)
+                        {
+                            return new OkObjectResult(_mapper.Map<ResultModel<bool>>(verifiedResult));
+                        }
+                        else if (verifiedResult.Status == (int)StatusType.StatusRetureData.ShowMessage)
+                        {
+                            return new BadRequestObjectResult(_mapper.Map<ResultModel<bool>>(verifiedResult));
+                        }
+                        else
+                        {
+                            return new BadRequestObjectResult(new ResultModel<bool>()
+                            {
+                                Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                                Message = "Server Code Errror!!!"
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(new ResultModel<bool>()
+                {
+                    Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                    Message = e.ToString()
+                });
+            }
+        }
+
+        [HttpPost("changepin")]
+        public async Task<IActionResult> ChangePin([FromBody]ChangePinSelectorModel changePinSelector)
+        {
+            try
+            {
+                string email = changePinSelector.Email;
+                string pin = changePinSelector.Pin;
+                string rePin = changePinSelector.RePin;
+                if (pin != rePin)
+                {
+                    return new BadRequestObjectResult(new ResultModel<RegisModel>()
+                    {
+                        Status = (int)StatusType.StatusRetureData.ShowMessage,
+                        Message = "รหัสใหม่ที่ใส่ไม่ตรงกับรหัสก่อนหน้า"
+                    });
+                }
+                else
+                {
+                    var regisResult = await _userService.ChangePin(email, pin);
+                    if (regisResult == null)
+                    {
+                        return new BadRequestObjectResult(new ResultModel<RegisModel>()
+                        {
+                            Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                            Message = "Don't have return data from service"
+                        });
+                    }
+                    else
+                    {
+                        if (regisResult.Status == (int)StatusType.StatusRetureData.Success)
+                        {
+                            return new OkObjectResult(_mapper.Map<ResultModel<RegisModel>>(regisResult));
+                        }
+                        else if (regisResult.Status == (int)StatusType.StatusRetureData.ShowMessage)
+                        {
+                            return new BadRequestObjectResult(_mapper.Map<ResultModel<RegisModel>>(regisResult));
+                        }
+                        else if (regisResult.Status == (int)StatusType.StatusRetureData.BackToFirstPage)
+                        {
+                            return new BadRequestObjectResult(_mapper.Map<ResultModel<RegisModel>>(regisResult));
+                        }
+                        else if (regisResult.Status == (int)StatusType.StatusRetureData.NotShowMessage)
+                        {
+                            return new BadRequestObjectResult(_mapper.Map<ResultModel<RegisModel>>(regisResult));
+                        }
+                        else
+                        {
+                            return new BadRequestObjectResult(new ResultModel<RegisModel>()
+                            {
+                                Status = (int)StatusType.StatusRetureData.NotShowMessage,
+                                Message = "Server Code Errror!!!"
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
             {
                 return new BadRequestObjectResult(new ResultModel<RegisModel>()
                 {
